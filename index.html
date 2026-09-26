@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高中英文單字練習中心</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+    background: #0b1020; color: #e6e9f2; min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 60% 40% at 15% 0%, rgba(88,120,255,.16), transparent),
+      radial-gradient(ellipse 50% 35% at 85% 100%, rgba(0,210,190,.12), transparent);
+  }
+  /* 細格網背景，科技感 */
+  body::before {
+    content: ''; position: fixed; inset: 0; z-index: -1;
+    background-image:
+      linear-gradient(rgba(120,150,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(120,150,255,.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  header { text-align: center; padding: 66px 20px 18px; }
+  .logo {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 64px; height: 64px; border-radius: 18px; font-size: 2rem;
+    background: linear-gradient(135deg,#263159,#1b2340);
+    border: 1px solid rgba(140,165,255,.25);
+    box-shadow: 0 0 30px rgba(96,125,255,.25);
+  }
+  h1 { font-size: 2rem; letter-spacing: .15em; margin-top: 18px; font-weight: 700;
+    background: linear-gradient(90deg,#8fb2ff,#7ef0dd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .subtitle { margin-top: 10px; color: #7d86a5; font-size: .9rem; letter-spacing: .3em; }
+  .divider { width: 60px; height: 2px; margin: 24px auto 0;
+    background: linear-gradient(90deg, transparent, #5f7dff, transparent); }
+
+  main { max-width: 1000px; margin: 0 auto; padding: 20px 20px 60px; }
+  .section-title { text-align: center; font-size: .85rem; color: #66719b; letter-spacing: .35em; margin: 30px 0 24px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .card {
+    position: relative; border-radius: 20px; overflow: hidden;
+    background: linear-gradient(160deg, rgba(38,49,89,.55), rgba(20,26,48,.75));
+    border: 1px solid rgba(140,165,255,.18);
+    backdrop-filter: blur(6px);
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .card:hover { transform: translateY(-6px); border-color: rgba(140,165,255,.45);
+    box-shadow: 0 16px 40px rgba(70,100,220,.25); }
+  .card .inner { padding: 30px 26px 26px; }
+  .badge { display: inline-block; padding: 5px 16px; border-radius: 20px; font-size: .8rem; font-weight: bold; letter-spacing: .1em; }
+  .c1 .badge { background: rgba(95,125,255,.18); color: #8fb2ff; border: 1px solid rgba(95,125,255,.4); }
+  .c2 .badge { background: rgba(0,210,190,.15); color: #7ef0dd; border: 1px solid rgba(0,210,190,.35); }
+  .card h2 { font-size: 1.35rem; margin-top: 14px; color: #fff; }
+  .card .meta { margin-top: 6px; font-size: .82rem; color: #8b94b5; letter-spacing: .08em; }
+  .card .desc { margin-top: 12px; font-size: .9rem; color: #aab2cf; line-height: 1.8; }
+  .card .go {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 22px;
+    padding: 12px 30px; border-radius: 30px; font-weight: bold; font-size: .95rem; text-decoration: none;
+    transition: .2s;
+  }
+  .c1 .go { background: linear-gradient(90deg,#5f7dff,#7c5fff); color: #fff; box-shadow: 0 4px 18px rgba(95,125,255,.35); }
+  .c2 .go { background: linear-gradient(90deg,#00c9b7,#2fd6a0); color: #04241f; box-shadow: 0 4px 18px rgba(0,210,190,.3); }
+  .card .go:hover { transform: scale(1.04); filter: brightness(1.12); }
+  .card .num { position: absolute; top: 18px; right: 24px; font-size: 2.6rem; font-weight: 800; color: rgba(255,255,255,.06); letter-spacing: .05em; }
+
+  /* 大學照片牆 */
+  .unis { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 8px; }
+  .uni {
+    position: relative; border-radius: 16px; overflow: hidden; height: 150px;
+    border: 1px solid rgba(140,165,255,.15);
+    transition: transform .25s, box-shadow .25s;
+  }
+  .uni:hover { transform: translateY(-4px); box-shadow: 0 10px 26px rgba(70,100,220,.28); }
+  .uni img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.05) brightness(.92); transition: .3s; }
+  .uni:hover img { transform: scale(1.06); filter: saturate(1.1) brightness(1); }
+  .uni .label {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 14px 10px;
+    background: linear-gradient(180deg, transparent, rgba(8,12,26,.85));
+    font-size: .85rem; font-weight: bold; letter-spacing: .08em; color: #fff;
+  }
+  .uni .label small { display: block; font-weight: normal; color: #9fb0e0; font-size: .7rem; margin-top: 2px; letter-spacing: .05em; }
+
+  .features { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 36px; }
+  .features span {
+    background: rgba(38,49,89,.45); border: 1px solid rgba(140,165,255,.16);
+    color: #9aa6cc; font-size: .8rem; padding: 7px 15px; border-radius: 18px;
+  }
+  footer { text-align: center; color: #525c7e; font-size: .78rem; padding: 34px 0 42px; letter-spacing: .12em; }
+  @media (max-width: 480px) { h1 { font-size: 1.4rem; } header { padding: 48px 16px 12px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">📖</div>
+  <h1>高中英文單字練習中心</h1>
+  <div class="subtitle">VOCABULARY TRAINING CENTER</div>
+  <div class="divider"></div>
+</header>
+
+<main>
+  <div class="section-title">選 擇 字 彙 庫</div>
+
+  <div class="cards">
+    <div class="card c1">
+      <div class="num">6000</div>
+      <div class="inner">
+        <span class="badge">學測 6000 字</span>
+        <h2>學測字彙 Level 1–6</h2>
+        <div class="meta">大學學科能力測驗 ｜ 共 6009 字</div>
+        <div class="desc">依難度分為六級，循序漸進。支援級別篩選，從 Level 1 基礎字開始逐步攻頂。</div>
+        <a class="go" href="gsat-vocab-cards.html">開始練習 →</a>
+      </div>
+    </div>
+
+    <div class="card c2">
+      <div class="num">7000</div>
+      <div class="inner">
+        <span class="badge">高中參考詞彙表</span>
+        <h2>學測 4000 ＋ 指考 7000</h2>
+        <div class="meta">台灣高中英文參考詞彙表 ｜ 共 5782 字</div>
+        <div class="desc">收錄學測基本 4000 字與指考進階 ★ 字，一份涵蓋高中到大考全部範圍。</div>
+        <a class="go" href="tw-senior-vocab-cards.html">開始練習 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:44px">目 標 大 學</div>
+
+  <div class="unis">
+    <div class="uni">
+      <img src="uni-assets/ntu.jpg" alt="國立台灣大學">
+      <div class="label">台灣大學<small>National Taiwan University</small></div>
+    </div>
+    <div class="uni">
+      <img src="uni-assets/nthu.jpg" alt="國立清華大學">
+      <div class="label">清華大學<small>National Tsing Hua University</small></div>
+    </div>
+    <div class="uni">
+      <img src="uni-assets/nycu.jpg" alt="國立陽明交通大學">
+      <div class="label">陽明交通大學<small>National Yang Ming Chiao Tung University</small></div>
+    </div>
+    <div class="uni">
+      <img src="uni-assets/ncku.jpg" alt="國立成功大學">
+      <div class="label">成功大學<small>National Cheng Kung University</small></div>
+    </div>
+  </div>
+
+  <div class="features">
+    <span>🃏 翻卡學習</span>
+    <span>🔊 英中雙語發音</span>
+    <span>🔁 自動播放（英文唸兩遍）</span>
+    <span>🗣️ 語速／間隔可調</span>
+    <span>✏️ 填空測驗</span>
+    <span>📊 學習歷程紀錄</span>
+  </div>
+</main>
+
+<footer>每天 20 個單字，一年就是 7000 字。加油！</footer>
+</body>
+</html>
